@@ -2,6 +2,11 @@ import { ResultSetHeader } from 'mysql2';
 import IProduct from '../interfaces/Iproduct';
 import connection from './connection';
 
+export const getProducts = async (): Promise<IProduct[]> => {
+  const [result] = await connection.execute('SELECT * FROM Trybesmith.Products');
+  return result as IProduct[];
+};
+
 export const getProductById = async (id: number): Promise<IProduct> => {
   const [result] = await connection
     .execute('SELECT id, name, amount FROM Trybesmith.Products WHERE id = ?', [id]);
