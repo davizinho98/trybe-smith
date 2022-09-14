@@ -2,7 +2,7 @@ import * as loginModel from '../models/loginModel';
 import IUser from '../interfaces/IUser';
 import HttpException from '../shared/httpException';
 
-const validateData = ({ username, password }: IUser) => {
+const validateData = ({ username, password }: IUser): void => {
   if (!username || typeof username !== 'string') {
     throw new HttpException(400, '"username" is required');
   }
