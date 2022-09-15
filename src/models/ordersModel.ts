@@ -13,4 +13,24 @@ export const getOrders = async (): Promise<IOrder[]> => {
   return result as IOrder[];
 };
 
+type Order = {
+  userId: number,
+  productsIds: number[],
+};
+
+export const createOrder = async (productsIds: number[], id: number): Promise<Order> => {
+  const [result] = await connection.execute(`
+  INSERT INTO Trybesmith.Orders (userId) VALUES (?)`, [id]);
+
+  const { insertId } = result as { insertId: number };
+
+  await Promise.all(productsIds.map(async (productId: number) => {
+    await connection.execute(
+      'UPDATE Trybesmith.Products SET orderId = ? WHERE id = ?',
+      [insertId, productId],
+    );
+  }));
+  return { userId: id, productsIds };
+};
+
 export const oi = 'oii';
